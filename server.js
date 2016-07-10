@@ -1,5 +1,6 @@
 var http = require('http');
 var util = require('util');
+var game = require('./game');
 
 var express = require('express');
 
@@ -18,14 +19,50 @@ app.get('/', function (req, res) {
 	const text = req.query.text;
 	const response_url = req.query.response_url;
 
-	var resp = '${test}, ${team_id}, ${channel_id}, ${channel_name}, ${user_id}, ${user_name}, ${command}, ${text}, ${response_url}';
 
-	console.log(text);
-	res.json({
-		"text": "input: " + token + ", " + team_id + ", " + channel_id + ", "+ channel_name + ", " + user_id + ", " + user_name+ ", " + command + ", " + text + ", " + response_url,
-		"attachments": {
-			"text": "TEST"
-		}
-	});
+	var responce = {};
+	var input = text.split(" ");
+	
+	// Handle input
+	if (token != Nrkey2tmCRu5YlO6nMIFBF4P) { // Check if token matches
+		// send error
+	}
+	else if (input[0] == "help") { // Help
+		// Responce = help
+	}
+	else if (input[0] == "status") { // Game status
+		// call game status
+		// responce = status
+	}
+	else if (input[0] == "move") { // Make move
+		// call move at position and player
+		// call game status
+		// responce = status
+	}
+	else if (input[0] == "forfeit") { // Forfeit
+		// game.forfeit(player)
+		//responce = game status 
+	}
+	else {  // Initiate game
+		// game start
+		//  responce = status
+	}
+
+	// game tools
+	// save game
+	// load game
+	// determine game state
+
+	res.json(responce);
+
+	// Authenticate token
+
+	// var resp = '${test}, ${team_id}, ${channel_id}, ${channel_name}, ${user_id}, ${user_name}, ${command}, ${text}, ${response_url}';
+	// res.json({
+	// 	"text": "input: " + token + ", " + team_id + ", " + channel_id + ", "+ channel_name + ", " + user_id + ", " + user_name+ ", " + command + ", " + text + ", " + response_url,
+	// 	"attachments": {
+	// 		"text": "TEST"
+	// 	}
+	// });
 });
 app.listen(port);
