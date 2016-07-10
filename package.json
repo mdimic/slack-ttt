@@ -1,0 +1,14 @@
+{
+  "name": "slack-ttt",
+  "version": "1.0.0",
+  "description": "Custom slash command for slack that plays tic-tac-toe",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Milan Dimic",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.14.0"
+  }
+}
