@@ -24,7 +24,7 @@ app.get('/', function (req, res) {
 	var input = text.split(" ");
 	
 	// Handle input
-	if (token != Nrkey2tmCRu5YlO6nMIFBF4P) { // Check if token matches
+	if (token != "Nrkey2tmCRu5YlO6nMIFBF4P") { // Check if token matches
 		// send error
 	}
 	else if (input[0] == "help") { // Help
@@ -33,6 +33,7 @@ app.get('/', function (req, res) {
 	else if (input[0] == "status") { // Game status
 		// call game status
 		// responce = status
+		game.getGameStatus();
 	}
 	else if (input[0] == "move") { // Make move
 		// call move at position and player
@@ -45,6 +46,17 @@ app.get('/', function (req, res) {
 	}
 	else {  // Initiate game
 		// game start
+		if (input.length > 2) {
+			// Error
+		}
+
+		var boardSize = 3;
+		if (input.length == 2)
+			boardSize = input[1];
+
+		var newGame = game.startGame(channel_name, user_name, input[0], boardSize);
+		res.json(game.getGameStatus(newGame));
+
 		//  responce = status
 	}
 
@@ -53,7 +65,7 @@ app.get('/', function (req, res) {
 	// load game
 	// determine game state
 
-	res.json(responce);
+	// res.json(responce);
 
 	// Authenticate token
 
