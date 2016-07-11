@@ -22,7 +22,7 @@ client.auth(redisURL.auth.split(":")[1]);
 // });
 module.exports = {
   getGameStatus: function (game) {
-
+    console.log("game Status");
 
     var text = "";
     switch(game.state) {
@@ -54,7 +54,7 @@ module.exports = {
             }
         ]
     };
-
+console.log("response: " + response);
     return response;
   },
   move: function (user_name, channel_name, row, col, successCallback) {
@@ -105,7 +105,7 @@ module.exports = {
 
     });
   },
-  forfeit: function (channel_name, user_name) {
+  forfeit: function (channel_name, user_name, successCallback) {
     loadGame(channel_name, function(game) {
       if (game.state != gameStatus.INPROGRESS) {
         // Error
@@ -120,7 +120,8 @@ module.exports = {
       storeGame(game);
 
       // return getGameStatus(game);
-      return game;
+      // return game;
+      successCallback(game);
 
     });
   },

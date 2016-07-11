@@ -43,7 +43,7 @@ app.get('/', function (req, res) {
 		console.log("call move");
 		game.move(user_name, channel_name, input[1], input[2], function(returnGame) {
 			console.log("Response");
-			res.json.bind(game.getGameStatus(returnGame));
+			res.json(game.getGameStatus(returnGame));
 		});
 		// console.log("updated game");
 		// console.log(updatedGame);
@@ -54,8 +54,9 @@ app.get('/', function (req, res) {
 		// responce = status
 	}
 	else if (input[0] == "forfeit") { // Forfeit
-		var forfeitGame = game.forfeit(channel_name, user_name);
-		res.json(game.getGameStatus(forfeitGame));		
+		game.forfeit(channel_name, user_name, function(forfeitGame) {
+			res.json(game.getGameStatus(forfeitGame));
+		});
 
 		//responce = game status 
 	}
