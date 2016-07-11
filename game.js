@@ -82,10 +82,10 @@ module.exports = {
       // check if game won
 
       // Change player
-      if (game.currentPlayer == player1)
-        game.currentPlayer = player2;
+      if (game.currentPlayer == game.player1)
+        game.currentPlayer = game.player2;
       else
-        game.currentPlayer = player1;
+        game.currentPlayer = game.player1;
 
 
       storeGame(game);

@@ -41,7 +41,7 @@ app.get('/', function (req, res) {
 
 		}
 
-		req.json(game.move(user_name, channel_name, input[1], input[1]));
+		req.json(game.move(user_name, channel_name, input[1], input[2]));
 
 		// call move at position and player
 		// call game status
