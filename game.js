@@ -88,7 +88,7 @@ console.log("response: " + response);
         game.board[row][col] = -1;
 
 
-      check if game won
+      // check if game won
       var winner = detectWinner(game.board);
       if (winner == 1)
         game.state = gameStatus.GAMEOVERP1WON;
