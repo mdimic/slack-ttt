@@ -149,7 +149,7 @@ console.log("response: " + response);
 
     return response;
   },
-  startGame: function (channel_name, player1, player2, boardSize, errorHandler) {
+  startGame: function (channel_name, player1, player2, boardSize, successCallback, errorHandler) {
     // If game exists in chanel, error
     // Start new game if old one is done
     loadGame(channel_name, function(game) {
@@ -169,7 +169,8 @@ console.log("response: " + response);
       //Save game
       storeGame(game);
 
-      return game;
+      // return game;
+      successCallback(game);
     });
 
 

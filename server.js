@@ -67,8 +67,12 @@ app.get('/', function (req, res) {
 			if (input.length == 2)
 				boardSize = input[1];
 
-			var newGame = game.startGame(channel_name, user_name, input[0], boardSize);
-			res.json(game.getGameStatus(newGame));
+			game.startGame(channel_name, user_name, input[0], boardSize, function(newGame) {
+				res.json(game.getGameStatus(newGame));	
+			}, function(errorMessage) {
+				res.json(game.generateError(errorMessage));
+			});
+			// res.json(game.getGameStatus(newGame));
 		}
 
 		//  responce = status
