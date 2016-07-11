@@ -76,14 +76,13 @@ console.log("response: " + response);
         errorHandler("That area is already marked.");
       }
       else {
-        //Check invalid position
-
+        console.log("Valid area");
         if (user_name == game.player1)
           game.board[row][col] = 1;
         else if (user_name == game.player2)
           game.board[row][col] = -1;
 
-
+console.log("Check if won");
         // check if game won
         var winner = detectWinner(game.board);
         if (winner == 1)
@@ -91,6 +90,7 @@ console.log("response: " + response);
         else if (winner == -1)
           game.state = gameStatus.GAMEOVERP2WON;
 
+        console.log("Checked if won");
         // Change player
         if (game.currentPlayer == game.player1)
           game.currentPlayer = game.player2;

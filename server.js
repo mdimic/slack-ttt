@@ -40,7 +40,9 @@ app.get('/', function (req, res) {
 			res.json(game.generateError("Invalid input. make a move type '/ttt move X Y' where X and Y are column and row respectively, or type '/ttt help' for more commands"));
 		}
 		else {
+			console.log("Called Move");
 			game.move(user_name, channel_name, input[1], input[2], function(returnGame) {
+				console.log("Returned move");
 				res.json(game.getGameStatus(returnGame));
 			}, function(errorMessage) {
 				res.json(game.generateError(errorMessage));
