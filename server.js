@@ -42,6 +42,8 @@ app.get('/', function (req, res) {
 		}
 
 		var updatedGame = game.move(user_name, channel_name, input[1], input[2]);
+		console.log("updated game");
+		console.log(updatedGame);
 		req.json(game.getGameStatus(updatedGame));
 
 		// call move at position and player
@@ -49,7 +51,9 @@ app.get('/', function (req, res) {
 		// responce = status
 	}
 	else if (input[0] == "forfeit") { // Forfeit
-		// game.forfeit(player)
+		var forfeitGame = game.forfeit(channel_name, user_name);
+		req.json(game.getGameStatus(forfeitGame));		
+
 		//responce = game status 
 	}
 	else {  // Initiate game

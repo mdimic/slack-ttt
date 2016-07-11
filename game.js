@@ -95,8 +95,24 @@ module.exports = {
 
     });
   },
-  forfeit: function () {
+  forfeit: function (channel_name, user_name) {
+    loadGame(channel_name, function(game) {
+      if (game.state != gameStatus.INPROGRESS) {
+        // Error
+      }
 
+      if (user_name == game.player1)
+        game.state = gameStatus.GAMEOVERP1FORFEIT;
+      else
+        game.state = gameStatus.GAMEOVERP2FORFEIT;
+
+
+      storeGame(game);
+
+      // return getGameStatus(game);
+      return game;
+
+    });
   },
   startGame: function (channel_name, player1, player2, boardSize) {
     // If game exists in chanel, error
