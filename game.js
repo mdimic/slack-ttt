@@ -73,6 +73,8 @@ module.exports = {
         // Error - Invalid move
       }
 
+      //Check invalid position
+
       if (user_name == game.player1)
         game.board[row][col] = 1;
       else if (user_name == game.player2)
@@ -80,6 +82,11 @@ module.exports = {
 
 
       // check if game won
+      var winner = detectWinner(board);
+      if (winner == 1)
+        game.state = gameStatus.GAMEOVERP1WON;
+      else if (winner == -1)
+        game.state = gameStatus.GAMEOVERP2WON;
 
       // Change player
       if (game.currentPlayer == game.player1)
@@ -214,4 +221,40 @@ function printBoard (board) {
   };
 
   return boardString;
+}
+
+function detectWinner (board) {
+  var horizSum = new Array();
+  var diagSum1 = 0;
+  var diagSum2 = 0;
+  var vertSum = new Array();
+  for (var i = 0; i < board.length; i++) {
+    for (var j = 0; j < board.length; j++) {
+      var val = board[i][j];
+      if (i == j) {
+        diagSum1 += val;
+      }
+      else if (i = board.length - j - 1) {
+        diagSum2 += val;
+      }
+
+      horizSum(j) += val;
+      vertSum(i) += val;
+    }
+  };
+
+  if (diagSum1 == board.length || diagSum2 == board.length)
+    return 1;
+  else if (diagSum1*(-1) == board.length || diagSum2*(-1) == board.length)
+    return -1;
+
+  for (var k = 0; k < board.length; k++) {
+    if (horizSum(k) == board.length || vertSum(k) == board.length)
+      return 1;
+    if (horizSum(k)*(-1) == board.length || vertSum(k)*(-1) == board.length)
+      return -1;
+  }
+
+  return 0;
+
 }
