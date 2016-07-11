@@ -84,11 +84,11 @@ console.log("response: " + response);
 
 console.log("Check if won");
         // check if game won
-        var winner = detectWinner(game.board);
-        if (winner == 1)
-          game.state = gameStatus.GAMEOVERP1WON;
-        else if (winner == -1)
-          game.state = gameStatus.GAMEOVERP2WON;
+        // var winner = detectWinner(game.board);
+        // if (winner == 1)
+        //   game.state = gameStatus.GAMEOVERP1WON;
+        // else if (winner == -1)
+        //   game.state = gameStatus.GAMEOVERP2WON;
 
         console.log("Checked if won");
         // Change player
