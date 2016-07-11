@@ -36,6 +36,13 @@ app.get('/', function (req, res) {
 		game.getGameStatus();
 	}
 	else if (input[0] == "move") { // Make move
+		if (input.length != 3) {
+			// Invalid move - /move 1 2
+
+		}
+
+		req.json(game.move(user_name, channel_name, input[1], input[1]));
+
 		// call move at position and player
 		// call game status
 		// responce = status
