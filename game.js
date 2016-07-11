@@ -2,8 +2,24 @@ var gameStatus = require('./gameStatus');
 // var REDIS_URL = "redis://h:pfds3h5en5ce3b6p6be6sb9i203@ec2-54-243-230-243compute-1.amazonaws.com:24599";
 // var client = require('redis').createClient(process.env.REDIS_URL);
 
-var redis = require('redis-url').connect(process.env.REDISTOGO_URL);
+// var redis = require('redis-url').connect(process.env.REDISTOGO_URL);
 
+var redis = require('redis');
+var url = require('url');
+var redisURL = url.parse(process.env.REDISCLOUD_URL);
+var client = redis.createClient(redisURL.port, redisURL.hostname, {no_ready_check: true});
+client.auth(redisURL.auth.split(":")[1]);
+// var client = redis.createClient(process.env.REDISCLOUD_URL, {no_ready_check: true});
+
+// client.set("welcome_msg", "Hello from Redis!")
+
+// client.get("welcome_msg", function (err, reply) {
+//   if (reply != null) {
+//     res.send(reply);
+//   } else {
+//     res.send("Error");
+//   }
+// });
 module.exports = {
   getGameStatus: function (game) {
 
@@ -103,15 +119,27 @@ module.exports = {
 };
 
 function loadGame (channel_name, successCallback) {
-  reddit.get('channel_name', function (err, value) {
-    if (value) {
-      successCallback(value);
+  // reddit.get('channel_name', function (err, value) {
+  //   if (value) {
+  //     successCallback(value);
+  //   }
+  // });
+
+  client.get(channel_name, function (err, reply) {
+    if (reply != null) {
+      // res.send(reply);
+      successCallback(reply);
+    } else {
+      // res.send("Error");
+      //Error
     }
   });
+
 };
 
 function storeGame (game) {
-  redis.set(game.channel_name, JSON.stringify(game));
+  client.set(game.channel_name, JSON.stringify(game));
+  // redis.set(game.channel_name, JSON.stringify(game));
 };
 
 function initBoard (boardSize) {
