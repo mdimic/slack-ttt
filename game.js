@@ -133,7 +133,8 @@ function loadGame (channel_name, successCallback) {
       // res.send(reply);
       console.log("Reply:");
       console.log(reply);
-      successCallback(reply);
+      console.log(err);
+      successCallback(JSON.parse(reply);
     } else {
       // res.send("Error");
       //Error
@@ -143,6 +144,8 @@ function loadGame (channel_name, successCallback) {
 };
 
 function storeGame (game) {
+  console.log("storing");
+  console.log(JSON.stringify(game));
   client.set(game.channel_name, JSON.stringify(game));
   // redis.set(game.channel_name, JSON.stringify(game));
 };
