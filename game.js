@@ -84,11 +84,11 @@ console.log("response: " + response);
 
 console.log("Check if won");
         // check if game won
-        // var winner = detectWinner(game.board);
-        // if (winner == 1)
-        //   game.state = gameStatus.GAMEOVERP1WON;
-        // else if (winner == -1)
-        //   game.state = gameStatus.GAMEOVERP2WON;
+        var winner = detectWinner(game.board);
+        if (winner == 1)
+          game.state = gameStatus.GAMEOVERP1WON;
+        else if (winner == -1)
+          game.state = gameStatus.GAMEOVERP2WON;
 
         console.log("Checked if won");
         // Change player
@@ -269,27 +269,27 @@ function detectWinner (board) {
       if (i == j) {
         diagSum1 += val;
       }
-      else if (i = board.length - j - 1) {
+      else if (i == board.length - j - 1) {
         diagSum2 += val;
       }
 
       horizSum[j] += val;
       vertSum[i] += val;
     }
-  };
+  }
 
   if (diagSum1 == board.length || diagSum2 == board.length)
     return 1;
   else if (diagSum1*(-1) == board.length || diagSum2*(-1) == board.length)
     return -1;
-
+  
   for (var k = 0; k < board.length; k++) {
     if (horizSum[k] == board.length || vertSum[k] == board.length)
       return 1;
     if (horizSum[k]*(-1) == board.length || vertSum[k]*(-1) == board.length)
       return -1;
-  }
+  };
 
   return 0;
 
-}
+};
