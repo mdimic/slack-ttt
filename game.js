@@ -134,7 +134,7 @@ function loadGame (channel_name, successCallback) {
       console.log("Reply:");
       console.log(reply);
       console.log(err);
-      successCallback(JSON.parse(reply);
+      successCallback(JSON.parse(reply));
     } else {
       // res.send("Error");
       //Error
