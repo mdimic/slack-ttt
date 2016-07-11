@@ -41,8 +41,8 @@ app.get('/', function (req, res) {
 
 		}
 
-		game.move(user_name, channel_name, input[1], input[2], req, function(request, returnGame) {
-			request.json(game.getGameStatus(returnGame));
+		game.move(user_name, channel_name, input[1], input[2], function(returnGame) {
+			req.json(game.getGameStatus(returnGame));
 		});
 		// console.log("updated game");
 		// console.log(updatedGame);
