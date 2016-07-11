@@ -1,6 +1,6 @@
 var gameStatus = require('./gameStatus');
-var REDIS_URL = "redis://h:pfds3h5en5ce3b6p6be6sb9i203@ec2-54-243-230-243compute-1.amazonaws.com:24599";
-var client = require('redis').createClient(process.env.REDIS_URL);
+// var REDIS_URL = "redis://h:pfds3h5en5ce3b6p6be6sb9i203@ec2-54-243-230-243compute-1.amazonaws.com:24599";
+// var client = require('redis').createClient(process.env.REDIS_URL);
 
 var redis = require('redis-url').connect(process.env.REDISTOGO_URL);
 
