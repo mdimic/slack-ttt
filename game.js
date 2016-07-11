@@ -66,49 +66,47 @@ console.log("response: " + response);
       if (game.state != gameStatus.INPROGRESS) {
         errorHandler("You can only make a move in a game still in progress.");
       }
-
-      if (game.currentPlayer != user_name) {
+      else if (game.currentPlayer != user_name) {
         errorHandler("It is not your turn. It is currently " + game.currentPlayer + "'s turn.");
       }
-
-
-      if (row < 0 || col < 0 || row > game.boardSize || col > game.boardSize) {
+      else if (row < 0 || col < 0 || row > game.boardSize || col > game.boardSize) {
         errorHandler("Entered area was out of bounds.");
       }
-
-      if (game.board[row][col] != 0) {
+      else if (game.board[row][col] != 0) {
         errorHandler("That area is already marked.");
       }
+      else {
+        //Check invalid position
 
-      //Check invalid position
-
-      if (user_name == game.player1)
-        game.board[row][col] = 1;
-      else if (user_name == game.player2)
-        game.board[row][col] = -1;
-
-
-      // check if game won
-      var winner = detectWinner(game.board);
-      if (winner == 1)
-        game.state = gameStatus.GAMEOVERP1WON;
-      else if (winner == -1)
-        game.state = gameStatus.GAMEOVERP2WON;
-
-      // Change player
-      if (game.currentPlayer == game.player1)
-        game.currentPlayer = game.player2;
-      else
-        game.currentPlayer = game.player1;
+        if (user_name == game.player1)
+          game.board[row][col] = 1;
+        else if (user_name == game.player2)
+          game.board[row][col] = -1;
 
 
-      storeGame(game);
+        // check if game won
+        var winner = detectWinner(game.board);
+        if (winner == 1)
+          game.state = gameStatus.GAMEOVERP1WON;
+        else if (winner == -1)
+          game.state = gameStatus.GAMEOVERP2WON;
 
-      // return getGameStatus(game);
-      // return game;
-      console.log("Callback with: " + game);
+        // Change player
+        if (game.currentPlayer == game.player1)
+          game.currentPlayer = game.player2;
+        else
+          game.currentPlayer = game.player1;
 
-      successCallback(game);
+
+        storeGame(game);
+
+        // return getGameStatus(game);
+        // return game;
+        console.log("Callback with: " + game);
+
+        successCallback(game);
+      }
+
 
     }, function(error) {
       errorHandler(error);
