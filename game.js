@@ -59,6 +59,8 @@ module.exports = {
   },
   move: function (user_name, channel_name, row, col) {
     loadGame(channel_name, function(game) {
+      console.log(row);
+      console.log(col);
       if (game.state != gameStatus.INPROGRESS) {
         // Error
       }
@@ -129,6 +131,8 @@ function loadGame (channel_name, successCallback) {
   client.get(channel_name, function (err, reply) {
     if (reply != null) {
       // res.send(reply);
+      console.log("Reply:");
+      console.log(reply);
       successCallback(reply);
     } else {
       // res.send("Error");
