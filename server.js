@@ -40,8 +40,9 @@ app.get('/', function (req, res) {
 			// Invalid move - /move 1 2
 
 		}
-
+		console.log("call move");
 		game.move(user_name, channel_name, input[1], input[2], function(returnGame) {
+			console.log("Response");
 			res.json.bind(game.getGameStatus(returnGame));
 		});
 		// console.log("updated game");

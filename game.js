@@ -99,8 +99,8 @@ module.exports = {
 
       // return getGameStatus(game);
       // return game;
-      console.log("Callback with: ");
-      console.log(game);
+      console.log("Callback with: " + game);
+
       successCallback(game);
 
     });
@@ -158,9 +158,8 @@ function loadGame (channel_name, successCallback) {
   client.get(channel_name, function (err, reply) {
     if (reply != null) {
       // res.send(reply);
-      console.log("Reply:");
-      console.log(reply);
-      console.log(err);
+      console.log("Reply:" + reply);
+      console.log("Err: " + err);
       successCallback(JSON.parse(reply));
     } else {
       // res.send("Error");
@@ -186,14 +185,14 @@ function initBoard (boardSize) {
       board[i][j] = 0;
     };
   };
-  console.log(board);
+  // console.log(board);
   return board;
 }
 
 // "text": "|       |       |  O  |\n----------------\n|       |       |  O  |\n----------------\n|  X  |  X  |  X  |"
 
 function printBoard (board) {
-  console.log(board);
+  // console.log(board);
   var boardString = "";
   for (var i = 0; i < board.length; i++) {
     boardString = boardString + "|";
