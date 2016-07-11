@@ -44,6 +44,8 @@ app.get('/', function (req, res) {
 		game.move(user_name, channel_name, input[1], input[2], function(returnGame) {
 			console.log("Response");
 			res.json(game.getGameStatus(returnGame));
+		}, function(errorMessage) {
+			res.json(game.generateError(errorMessage));
 		});
 		// console.log("updated game");
 		// console.log(updatedGame);
@@ -56,6 +58,8 @@ app.get('/', function (req, res) {
 	else if (input[0] == "forfeit") { // Forfeit
 		game.forfeit(channel_name, user_name, function(forfeitGame) {
 			res.json(game.getGameStatus(forfeitGame));
+		}, function(errorMessage) {
+			res.json(game.generateError(errorMessage));
 		});
 
 		//responce = game status 
@@ -63,7 +67,7 @@ app.get('/', function (req, res) {
 	else {  // Initiate game
 		// game start
 		if (input.length > 2) {
-			// Error
+			res.json(game.generateError("Invalid input. To initiate a game type '/ttt USER' where USER is the person you want to challenge. or type '/ttt help' for more commands"));
 		}
 
 		var boardSize = 3;

@@ -47,6 +47,7 @@ module.exports = {
     }
 
     var response = {
+      "response_type": "in_channel",
       "text": text,
         "attachments": [
             {
@@ -57,20 +58,26 @@ module.exports = {
 console.log("response: " + response);
     return response;
   },
-  move: function (user_name, channel_name, row, col, successCallback) {
+  move: function (user_name, channel_name, row, col, successCallback, errorHandler) {
     loadGame(channel_name, function(game) {
       console.log(row);
       console.log(col);
+
       if (game.state != gameStatus.INPROGRESS) {
-        // Error
+        errorHandler("You can only make a move in a game still in progress.");
       }
 
       if (game.currentPlayer != user_name) {
-        // Error
+        errorHandler("It is not your turn. It is currently " + game.currentPlayer + "'s turn.");
+      }
+
+
+      if (row < 0 || col < 0 || row > game.boardSize || col > game.boardSize) {
+        errorHandler("Please enter a area to be marked");
       }
 
       if (game.board[row][col] != 0) {
-        // Error - Invalid move
+        errorHandler("That area is already marked.");
       }
 
       //Check invalid position
@@ -105,10 +112,10 @@ console.log("response: " + response);
 
     });
   },
-  forfeit: function (channel_name, user_name, successCallback) {
+  forfeit: function (channel_name, user_name, successCallback, errorHandler) {
     loadGame(channel_name, function(game) {
       if (game.state != gameStatus.INPROGRESS) {
-        // Error
+        errorHandler("You can only forfeit a game still in progress.");
       }
 
       if (user_name == game.player1)
@@ -125,7 +132,20 @@ console.log("response: " + response);
 
     });
   },
-  startGame: function (channel_name, player1, player2, boardSize) {
+  generateError: function (errorMessaage) {
+    var response = {
+      "response_type": "ephemeral",
+      "text": "Error:",
+        "attachments": [
+            {
+                "text": errorMessaage
+            }
+        ]
+    };
+
+    return response;
+  },
+  startGame: function (channel_name, player1, player2, boardSize, errorHandler) {
     // If game exists in chanel, error
     // Start new game if old one is done
 
