@@ -25,35 +25,28 @@ app.get('/', function (req, res) {
 	
 	// Handle input
 	if (token != "Nrkey2tmCRu5YlO6nMIFBF4P") { // Check if token matches
-		// send error
+		res.json(game.generateError("Unauthorized request."));
 	}
 	else if (input[0] == "help") { // Help
 		// Responce = help
 	}
 	else if (input[0] == "status") { // Game status
-		// call game status
-		// responce = status
+		// load game
+		// not started, or status=...
 		game.getGameStatus();
 	}
 	else if (input[0] == "move") { // Make move
 		if (input.length != 3) {
-			// Invalid move - /move 1 2
-
+			res.json(game.generateError("Invalid input. make a move type '/ttt move X Y' where X and Y are column and row respectively, or type '/ttt help' for more commands"));
 		}
-		console.log("call move");
-		game.move(user_name, channel_name, input[1], input[2], function(returnGame) {
-			console.log("Response");
-			res.json(game.getGameStatus(returnGame));
-		}, function(errorMessage) {
-			res.json(game.generateError(errorMessage));
-		});
-		// console.log("updated game");
-		// console.log(updatedGame);
-		// req.json(game.getGameStatus(updatedGame));
+		else {
+			game.move(user_name, channel_name, input[1], input[2], function(returnGame) {
+				res.json(game.getGameStatus(returnGame));
+			}, function(errorMessage) {
+				res.json(game.generateError(errorMessage));
+			});
+		}
 
-		// call move at position and player
-		// call game status
-		// responce = status
 	}
 	else if (input[0] == "forfeit") { // Forfeit
 		game.forfeit(channel_name, user_name, function(forfeitGame) {
@@ -67,15 +60,16 @@ app.get('/', function (req, res) {
 	else {  // Initiate game
 		// game start
 		if (input.length > 2) {
-			res.json(game.generateError("Invalid input. To initiate a game type '/ttt USER' where USER is the person you want to challenge. or type '/ttt help' for more commands"));
+			res.json(game.generateError("Invalid input. To initiate a game type '/ttt USER' where USER is the person you want to challenge, or type '/ttt help' for more commands"));
 		}
+		else {
+			var boardSize = 3;
+			if (input.length == 2)
+				boardSize = input[1];
 
-		var boardSize = 3;
-		if (input.length == 2)
-			boardSize = input[1];
-
-		var newGame = game.startGame(channel_name, user_name, input[0], boardSize);
-		res.json(game.getGameStatus(newGame));
+			var newGame = game.startGame(channel_name, user_name, input[0], boardSize);
+			res.json(game.getGameStatus(newGame));
+		}
 
 		//  responce = status
 	}

@@ -73,7 +73,7 @@ console.log("response: " + response);
 
 
       if (row < 0 || col < 0 || row > game.boardSize || col > game.boardSize) {
-        errorHandler("Please enter a area to be marked");
+        errorHandler("Entered area was out of bounds.");
       }
 
       if (game.board[row][col] != 0) {
@@ -88,12 +88,12 @@ console.log("response: " + response);
         game.board[row][col] = -1;
 
 
-      // check if game won
-      // var winner = detectWinner(game.board);
-      // if (winner == 1)
-      //   game.state = gameStatus.GAMEOVERP1WON;
-      // else if (winner == -1)
-      //   game.state = gameStatus.GAMEOVERP2WON;
+      check if game won
+      var winner = detectWinner(game.board);
+      if (winner == 1)
+        game.state = gameStatus.GAMEOVERP1WON;
+      else if (winner == -1)
+        game.state = gameStatus.GAMEOVERP2WON;
 
       // Change player
       if (game.currentPlayer == game.player1)
@@ -110,6 +110,8 @@ console.log("response: " + response);
 
       successCallback(game);
 
+    }, function(error) {
+      errorHandler(error);
     });
   },
   forfeit: function (channel_name, user_name, successCallback, errorHandler) {
@@ -130,6 +132,8 @@ console.log("response: " + response);
       // return game;
       successCallback(game);
 
+    }, function(error){
+      errorHandler(error);
     });
   },
   generateError: function (errorMessaage) {
@@ -148,28 +152,33 @@ console.log("response: " + response);
   startGame: function (channel_name, player1, player2, boardSize, errorHandler) {
     // If game exists in chanel, error
     // Start new game if old one is done
+    loadGame(channel_name, function(game) {
+        errorHandler("Please finish the current game in the channel before creating a new one.");
 
-    var game = {
-      channel_name: channel_name,
-      board: initBoard(boardSize),
-      state: gameStatus.INPROGRESS,
-      boardSize: boardSize,
-      player1: player1,
-      player2: player2,
-      currentPlayer: player1
-    };
+    }, function(error){
+      var game = {
+        channel_name: channel_name,
+        board: initBoard(boardSize),
+        state: gameStatus.INPROGRESS,
+        boardSize: boardSize,
+        player1: player1,
+        player2: player2,
+        currentPlayer: player1
+      };
 
-    //Save game
-    storeGame(game);
+      //Save game
+      storeGame(game);
 
-    return game;
+      return game;
+    });
+
 
     // callback(gameStatus(game));
 
   }
 };
 
-function loadGame (channel_name, successCallback) {
+function loadGame (channel_name, successCallback, errorCallback) {
   // reddit.get('channel_name', function (err, value) {
   //   if (value) {
   //     successCallback(value);
@@ -183,8 +192,7 @@ function loadGame (channel_name, successCallback) {
       console.log("Err: " + err);
       successCallback(JSON.parse(reply));
     } else {
-      // res.send("Error");
-      //Error
+      errorCallback(err);
     }
   });
 
@@ -223,10 +231,10 @@ function printBoard (board) {
               boardString = boardString + "       |";
               break;
           case 1:
-              boardString = boardString + "  O  |";
+              boardString = boardString + "  X  |";
               break;
           case -1:
-              boardString = boardString + "  X  |";
+              boardString = boardString + "  O  |";
               break;
       }
     };
