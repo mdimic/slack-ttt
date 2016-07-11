@@ -157,7 +157,10 @@ console.log("response: " + response);
         var newGame = createGame(channel_name, player1, player2, boardSize);
         successCallback(newGame);
       }
-        errorHandler("Please finish the current game in the channel before creating a new one.");
+      else {
+        errorHandler("Please finish the current game in the channel before creating a new one.");        
+      }
+
 
     }, function(error){
         var newGame = createGame(channel_name, player1, player2, boardSize);
