@@ -152,37 +152,36 @@ console.log("response: " + response);
   startGame: function (channel_name, player1, player2, boardSize, successCallback, errorHandler) {
     // If game exists in chanel, error
     // Start new game if old one is done
-    var toCreate = false;
     loadGame(channel_name, function(game) {
-      if (game.state != gameStatus.INPROGRESS)
-        toCreate = true;
+      if (game.state != gameStatus.INPROGRESS) {
+        var newGame = createGame(channel_name, player1, player2, boardSize);
+        successCallback(newGame);
+      }
+        errorHandler("Please finish the current game in the channel before creating a new one.");
+
     }, function(error){
-      toCreate = true;
+        var newGame = createGame(channel_name, player1, player2, boardSize);
+        successCallback(newGame);
     });
 
-    if (toCreate == true) {
-      var game = {
-        channel_name: channel_name,
-        board: initBoard(boardSize),
-        state: gameStatus.INPROGRESS,
-        boardSize: boardSize,
-        player1: player1,
-        player2: player2,
-        currentPlayer: player1
-      };
 
-      //Save game
-      storeGame(game);
-
-      // return game;
-      successCallback(game);
-    }
-    else {
-      errorHandler("Please finish the current game in the channel before creating a new one.");
-    }
     // callback(gameStatus(game));
 
   }
+};
+
+function createGame (channel_name, player1, player2, boardSize) {
+  var game = {
+    channel_name: channel_name,
+    board: initBoard(boardSize),
+    state: gameStatus.INPROGRESS,
+    boardSize: boardSize,
+    player1: player1,
+    player2: player2,
+    currentPlayer: player1
+  };
+  storeGame(game);
+  return game;
 };
 
 function loadGame (channel_name, successCallback, errorCallback) {
