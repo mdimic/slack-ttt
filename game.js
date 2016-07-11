@@ -90,7 +90,8 @@ module.exports = {
 
       storeGame(game);
 
-      return getGameStatus(game);
+      // return getGameStatus(game);
+      return game;
 
     });
   },
