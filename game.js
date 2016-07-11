@@ -100,6 +100,7 @@ module.exports = {
     // Start new game if old one is done
 
     var game = {
+      channel_name: channel_name,
       board: initBoard(boardSize),
       state: gameStatus.INPROGRESS,
       boardSize: boardSize,
