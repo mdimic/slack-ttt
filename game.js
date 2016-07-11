@@ -238,8 +238,8 @@ function detectWinner (board) {
         diagSum2 += val;
       }
 
-      horizSum(j) += val;
-      vertSum(i) += val;
+      horizSum[j] += val;
+      vertSum[i] += val;
     }
   };
 
@@ -249,9 +249,9 @@ function detectWinner (board) {
     return -1;
 
   for (var k = 0; k < board.length; k++) {
-    if (horizSum(k) == board.length || vertSum(k) == board.length)
+    if (horizSum[k] == board.length || vertSum[k] == board.length)
       return 1;
-    if (horizSum(k)*(-1) == board.length || vertSum(k)*(-1) == board.length)
+    if (horizSum[k]*(-1) == board.length || vertSum[k]*(-1) == board.length)
       return -1;
   }
 
