@@ -57,7 +57,7 @@ module.exports = {
 
     return response;
   },
-  move: function (user_name, channel_name, row, col, successCallback) {
+  move: function (user_name, channel_name, row, col, request, successCallback) {
     loadGame(channel_name, function(game) {
       console.log(row);
       console.log(col);
@@ -92,7 +92,7 @@ module.exports = {
 
       // return getGameStatus(game);
       // return game;
-      successCallback(game);
+      successCallback(request, game);
 
     });
   },
