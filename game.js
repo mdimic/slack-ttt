@@ -82,11 +82,11 @@ module.exports = {
 
 
       // check if game won
-      var winner = detectWinner(game.board);
-      if (winner == 1)
-        game.state = gameStatus.GAMEOVERP1WON;
-      else if (winner == -1)
-        game.state = gameStatus.GAMEOVERP2WON;
+      // var winner = detectWinner(game.board);
+      // if (winner == 1)
+      //   game.state = gameStatus.GAMEOVERP1WON;
+      // else if (winner == -1)
+      //   game.state = gameStatus.GAMEOVERP2WON;
 
       // Change player
       if (game.currentPlayer == game.player1)
