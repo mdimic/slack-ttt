@@ -36,7 +36,7 @@ app.get('/', function (req, res) {
 					"title": "Tic-tac-toe commands",
 	            	"text": "'/ttt [username]'' start a game with username" +
 							"\n'/ttt status' returns current board status" +
-							"\n'/ttt move [row] [column]' mark an empty space at [row, column]" +
+							"\n'/ttt move [row] [column]' mark an empty space at [row, column]. Row and column go from 0 to [Board Size]." +
 					        "\n'/ttt forfeit' forfeit the game. Any player can run this command regardless of whos turn it is." +
 					        "\n'/ttt help' list all available commands.",
 	            }

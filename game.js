@@ -69,7 +69,7 @@ console.log("response: " + response);
       else if (game.currentPlayer != user_name) {
         errorHandler("It is not your turn. It is currently " + game.currentPlayer + "'s turn.");
       }
-      else if (row < 0 || col < 0 || row > game.boardSize || col > game.boardSize) {
+      else if (row < 0 || col < 0 || row > game.boardSize - 1 || col > game.boardSize - 1) {
         errorHandler("Entered area was out of bounds.");
       }
       else if (game.board[row][col] != 0) {
@@ -89,6 +89,8 @@ console.log("Check if won");
           game.state = gameStatus.GAMEOVERP1WON;
         else if (winner == -1)
           game.state = gameStatus.GAMEOVERP2WON;
+        else if (winner == 2)
+          game.state = gameStatus.GAMEOVERDRAW;
 
         console.log("Checked if won");
         // Change player
@@ -96,6 +98,10 @@ console.log("Check if won");
           game.currentPlayer = game.player2;
         else
           game.currentPlayer = game.player1;
+
+        //TODO: test draw draw
+        //TODO: formatting
+        //TODO: game help and other commands help
 
 
         storeGame(game);
@@ -189,7 +195,8 @@ function createGame (channel_name, player1, player2, boardSize) {
     boardSize: boardSize,
     player1: player1,
     player2: player2,
-    currentPlayer: player1
+    currentPlayer: player1,
+
   };
   storeGame(game);
   return game;
@@ -269,10 +276,11 @@ function printBoard (board) {
 }
 
 function detectWinner (board) {
-  var horizSum = new Array();
+  var horizSum = new Array(board.length).fill(0);
   var diagSum1 = 0;
   var diagSum2 = 0;
-  var vertSum = new Array();
+  var vertSum = new Array(board.length).fill(0);
+  var markCounter = 0;
   for (var i = 0; i < board.length; i++) {
     for (var j = 0; j < board.length; j++) {
       var val = board[i][j];
@@ -285,9 +293,13 @@ function detectWinner (board) {
 
       horizSum[j] += val;
       vertSum[i] += val;
+
+      if (val != 0)
+        markCounter++;
     }
   }
 
+  // Check for winner
   if (diagSum1 == board.length || diagSum2 == board.length)
     return 1;
   else if (diagSum1*(-1) == board.length || diagSum2*(-1) == board.length)
@@ -300,6 +312,10 @@ function detectWinner (board) {
       return -1;
   };
 
-  return 0;
+  // No winner, check for tie
+  if (markCounter == board.length * board.length)
+    return 2; // Tie
+  else
+    return 0;  // No winner or tie
 
 };
