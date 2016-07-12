@@ -34,10 +34,10 @@ app.get('/', function (req, res) {
 			"attachments": [
 	            {
 					"title": "Tic-tac-toe commands",
-	            	"text": "'/ttt [username]'' start a game with username" +
-							"\n'/ttt status' returns current board status" +
-							"\n'/ttt move [row] [column]' mark an empty space at [row, column]. Row and column go from 0 to [Board Size]." +
-					        "\n'/ttt forfeit' forfeit the game. Any player can run this command regardless of whos turn it is." +
+	            	"text": "'/ttt [username]' - start a game with username." +
+							"\n'/ttt status' - displays current board status." +
+							"\n'/ttt move [row] [column]' - mark an empty space at [row, column]. Row and column go from 0 to [Board Size]." +
+					        "\n'/ttt forfeit' - forfeit the game. Any player can run this command regardless of whos turn it is." +
 					        "\n'/ttt help' list all available commands.",
 	            }
         	]
@@ -45,14 +45,14 @@ app.get('/', function (req, res) {
 	}
 	else if (input[0] == "status") { // Game status
 		game.printGame(channel_name, function(gameStatus) {
-			res.json(game.printGame(gameStatus));
+			res.json(game.getGameStatus(gameStatus));
 		}, function(errorMessage) {
 			res.json(game.generateError(errorMessage));
 		});
 	}
 	else if (input[0] == "move") { // Make move
 		if (input.length != 3) {
-			res.json(game.generateError("Invalid input. make a move type '/ttt move X Y' where X and Y are column and row respectively, or type '/ttt help' for more commands"));
+			res.json(game.generateError("Invalid input. make a move type '/ttt move [row] [column]' to mark the box at [row, column] where row and column both go from 0 to [Board Size], or type '/ttt help' for more commands"));
 		}
 		else {
 			console.log("Called Move");
@@ -77,7 +77,7 @@ app.get('/', function (req, res) {
 	else {  // Initiate game
 		// game start
 		if (input.length > 2) {
-			res.json(game.generateError("Invalid input. To initiate a game type '/ttt USER' where USER is the person you want to challenge, or type '/ttt help' for more commands"));
+			res.json(game.generateError("Invalid input. To initiate a game type '/ttt [Username]' to play a game against username, or type '/ttt help' for more commands"));
 		}
 		else {
 			var boardSize = 3;
