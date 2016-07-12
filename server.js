@@ -44,8 +44,8 @@ app.get('/', function (req, res) {
 		});
 	}
 	else if (input[0] == "status") { // Game status
-		game.printGame(channel_name, function(gameStatus) {
-			res.json(game.getGameStatus(gameStatus));
+		game.getGameStatus(channel_name, function(gameStatus) {
+			res.json(game.printGame(gameStatus));
 		}, function(errorMessage) {
 			res.json(game.generateError(errorMessage));
 		});

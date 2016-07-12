@@ -143,11 +143,11 @@ console.log("Check if won");
   getGameStatus: function (channel_name, successCallback, errorHandler) {
     loadGame(channel_name, function(game) {
 
-      storeGame(game);
+      // storeGame(game);
       successCallback(game);
 
     }, function(error){
-      successCallback("There is currently no game in progress. To start a game, type '/ttt user' where user is the username of who you want to challenge.");
+      errorHandler("There is currently no game in progress. To start a game, type '/ttt user' where user is the username of who you want to challenge.");
     });
   },
   generateError: function (errorMessaage) {
