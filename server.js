@@ -27,13 +27,28 @@ app.get('/', function (req, res) {
 	if (token != "Nrkey2tmCRu5YlO6nMIFBF4P") { // Check if token matches
 		res.json(game.generateError("Unauthorized request."));
 	}
-	else if (input[0] == "help") { // Help
+	else if (!input[0] || input[0] == "help") { // Help
 		// Responce = help
+		res.json({
+			"response_type": "ephemeral",
+			"attachments": [
+	            {
+					"title": "Tic-tac-toe commands",
+	            	"text": "'/ttt [username]'' start a game with username" +
+							"\n'/ttt status' returns current board status" +
+							"\n'/ttt move [row] [column]' mark an empty space at [row, column]" +
+					        "\n'/ttt forfeit' forfeit the game. Any player can run this command regardless of whos turn it is." +
+					        "\n'/ttt help' list all available commands.",
+	            }
+        	]
+		});
 	}
 	else if (input[0] == "status") { // Game status
-		// load game
-		// not started, or status=...
-		game.getGameStatus();
+		game.printGame(channel_name, function(gameStatus) {
+			res.json(game.printGame(gameStatus));
+		}, function(errorMessage) {
+			res.json(game.generateError(errorMessage));
+		});
 	}
 	else if (input[0] == "move") { // Make move
 		if (input.length != 3) {
@@ -43,7 +58,7 @@ app.get('/', function (req, res) {
 			console.log("Called Move");
 			game.move(user_name, channel_name, input[1], input[2], function(returnGame) {
 				console.log("Returned move");
-				res.json(game.getGameStatus(returnGame));
+				res.json(game.printGame(returnGame));
 			}, function(errorMessage) {
 				res.json(game.generateError(errorMessage));
 			});
@@ -52,7 +67,7 @@ app.get('/', function (req, res) {
 	}
 	else if (input[0] == "forfeit") { // Forfeit
 		game.forfeit(channel_name, user_name, function(forfeitGame) {
-			res.json(game.getGameStatus(forfeitGame));
+			res.json(game.printGame(forfeitGame));
 		}, function(errorMessage) {
 			res.json(game.generateError(errorMessage));
 		});
@@ -70,11 +85,11 @@ app.get('/', function (req, res) {
 				boardSize = input[1];
 
 			game.startGame(channel_name, user_name, input[0], boardSize, function(newGame) {
-				res.json(game.getGameStatus(newGame));	
+				res.json(game.printGame(newGame));	
 			}, function(errorMessage) {
 				res.json(game.generateError(errorMessage));
 			});
-			// res.json(game.getGameStatus(newGame));
+			// res.json(game.printGame(newGame));
 		}
 
 		//  responce = status

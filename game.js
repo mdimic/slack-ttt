@@ -21,7 +21,7 @@ client.auth(redisURL.auth.split(":")[1]);
 //   }
 // });
 module.exports = {
-  getGameStatus: function (game) {
+  printGame: function (game) {
     console.log("game Status");
 
     var text = "";
@@ -132,6 +132,16 @@ console.log("Check if won");
 
     }, function(error){
       errorHandler(error);
+    });
+  },
+  getGameStatus: function (channel_name, successCallback, errorHandler) {
+    loadGame(channel_name, function(game) {
+
+      storeGame(game);
+      successCallback(game);
+
+    }, function(error){
+      successCallback("There is currently no game in progress. To start a game, type '/ttt user' where user is the username of who you want to challenge.");
     });
   },
   generateError: function (errorMessaage) {
