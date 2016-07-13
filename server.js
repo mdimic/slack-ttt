@@ -6,6 +6,8 @@ var express = require('express');
 
 var app = express();
 var port = Number(process.env.PORT || 3000);
+// var request = require('request');
+// var authenticationTokens = require('./authentication');
 
 
 app.get('/', function (req, res) {
@@ -90,11 +92,22 @@ app.get('/', function (req, res) {
 			if (input.length == 2)
 				boardSize = input[1];
 
-			game.startGame(channel_name, user_name, input[0], boardSize, function(newGame) {
-				res.json(game.printGame(newGame));	
-			}, function(errorMessage) {
-				res.json(game.generateError(errorMessage));
-			});
+			// if (userInChannel(input[0])) {
+				game.startGame(channel_name, user_name, input[0], boardSize, function(newGame) {
+					res.json(game.printGame(newGame));	
+				}, function(errorMessage) {
+					res.json(game.generateError(errorMessage));
+				});
+			// }
+			// else {
+			// 	res.json(game.generateError("That player is not in this channel."));
+			// }
+			
+			// game.startGame(channel_name, user_name, input[0], boardSize, function(newGame) {
+			// 	res.json(game.printGame(newGame));	
+			// }, function(errorMessage) {
+			// 	res.json(game.generateError(errorMessage));
+			// });
 			// res.json(game.printGame(newGame));
 		}
 
@@ -119,3 +132,13 @@ app.get('/', function (req, res) {
 	// });
 });
 app.listen(port);
+
+// function userInChannel(userid, channel_id) {
+// 	request("https://slack.com/api/channels.info?token=" + authenticationTokens.slackToken + "&channel=" + channel_id, function (error, response, body) {
+// 	  if (!error) {
+// 	  	var members = JSON.parse(body).channel.members;
+// 	  	if (members.indexOf(userid) > -1)
+// 			console.log("Contains");
+// 	  }
+// 	});
+// }

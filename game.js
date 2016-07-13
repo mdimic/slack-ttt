@@ -25,26 +25,34 @@ module.exports = {
     console.log("game Status");
 
     var text = "";
+    var color = "";
     switch(game.state) {
         case gameStatus.INPROGRESS:
               text = "Game currently in progress.\nIt's " + game.currentPlayer + "'s turn.";
+              color = "#0000ff";
             break;
         case gameStatus.GAMEOVERP1WON:
               text = "Game over. \n" + game.player1 + " won!";
+              color = "good";
             break;
         case gameStatus.GAMEOVERP2WON:
               text = "Game over. \n" + game.player2 + " won!";
+              color = "good";
             break;
         case gameStatus.GAMEOVERDRAW:
               text = "Game over. \nIt's a tie!";
+              color = "warning";
             break;
         case gameStatus.GAMEOVERP1FORFEIT:
               text = "Game over. \n" + game.player1 + " forfeited";
+              color = "warning";
             break;
         case gameStatus.GAMEOVERP2FORFEIT:
               text = "Game over. \n" + game.player2 + " forfeited";
+              color = "warning";
             break;
     }
+
 
     var response = {
       "response_type": "in_channel",
@@ -52,7 +60,7 @@ module.exports = {
         "attachments": [
             {
                 "text": printBoard(game.board),
-                "color": "good",
+                "color": color,
             }
         ]
     };
