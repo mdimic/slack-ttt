@@ -51,7 +51,8 @@ module.exports = {
       "text": text,
         "attachments": [
             {
-                "text": printBoard(game.board)
+                "text": printBoard(game.board),
+                "color": "good",
             }
         ]
     };
@@ -123,11 +124,12 @@ console.log("Check if won");
       if (game.state != gameStatus.INPROGRESS) {
         errorHandler("You can only forfeit a game still in progress.");
       }
-
-      if (user_name == game.player1)
+      else if (user_name == game.player1)
         game.state = gameStatus.GAMEOVERP1FORFEIT;
-      else
+      else if (user_name == game.player2)
         game.state = gameStatus.GAMEOVERP2FORFEIT;
+      else
+       errorHandler("You can only forfeit a game that you are a part of."); 
 
 
       storeGame(game);
@@ -153,10 +155,11 @@ console.log("Check if won");
   generateError: function (errorMessaage) {
     var response = {
       "response_type": "ephemeral",
-      "text": "Error:",
+      //"text": "Error:",
         "attachments": [
             {
-                "text": errorMessaage
+                "text": errorMessaage,
+                "color": "danger",
             }
         ]
     };

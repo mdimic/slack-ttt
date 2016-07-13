@@ -66,11 +66,17 @@ app.get('/', function (req, res) {
 
 	}
 	else if (input[0] == "forfeit") { // Forfeit
-		game.forfeit(channel_name, user_name, function(forfeitGame) {
-			res.json(game.printGame(forfeitGame));
-		}, function(errorMessage) {
-			res.json(game.generateError(errorMessage));
-		});
+		if (input.length == 1) {
+			game.forfeit(channel_name, user_name, function(forfeitGame) {
+				res.json(game.printGame(forfeitGame));
+			}, function(errorMessage) {
+				res.json(game.generateError(errorMessage));
+			});
+		}
+		else {
+			res.json(game.generateError("Invalid input. To forfeit a game, type '/ttt forfeit'. You must be a player in the current game to forfeit, or type '/ttt help' for more commands"));
+		}
+
 
 		//responce = game status 
 	}
