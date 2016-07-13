@@ -78,12 +78,8 @@ app.get('/', function (req, res) {
 		else {
 			res.json(game.generateError("Invalid input. To forfeit a game, type '/ttt forfeit'. You must be a player in the current game to forfeit, or type '/ttt help' for more commands"));
 		}
-
-
-		//responce = game status 
 	}
 	else if (input[0] == "start") {  // Initiate game
-		// game start
 		if (input.length > 3) {
 			res.json(game.generateError("Invalid input. To initiate a game type '/ttt start [Username]' to play a game against username, or type '/ttt help' for more commands"));
 		}
@@ -102,37 +98,12 @@ app.get('/', function (req, res) {
 			// else {
 			// 	res.json(game.generateError("That player is not in this channel."));
 			// }
-
-			// game.startGame(channel_name, user_name, input[0], boardSize, function(newGame) {
-			// 	res.json(game.printGame(newGame));	
-			// }, function(errorMessage) {
-			// 	res.json(game.generateError(errorMessage));
-			// });
-			// res.json(game.printGame(newGame));
 		}
 
-		//  responce = status
 	}
 	else {
 		res.json(game.generateError("Invalid input. Type '/ttt help' for more commands"));
 	}
-
-	// game tools
-	// save game
-	// load game
-	// determine game state
-
-	// res.json(responce);
-
-	// Authenticate token
-
-	// var resp = '${test}, ${team_id}, ${channel_id}, ${channel_name}, ${user_id}, ${user_name}, ${command}, ${text}, ${response_url}';
-	// res.json({
-	// 	"text": "input: " + token + ", " + team_id + ", " + channel_id + ", "+ channel_name + ", " + user_id + ", " + user_name+ ", " + command + ", " + text + ", " + response_url,
-	// 	"attachments": {
-	// 		"text": "TEST"
-	// 	}
-	// });
 });
 app.listen(port);
 

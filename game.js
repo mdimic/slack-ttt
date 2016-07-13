@@ -1,31 +1,18 @@
 var gameStatus = require('./gameStatus');
-// var REDIS_URL = "redis://h:pfds3h5en5ce3b6p6be6sb9i203@ec2-54-243-230-243compute-1.amazonaws.com:24599";
-// var client = require('redis').createClient(process.env.REDIS_URL);
-
-// var redis = require('redis-url').connect(process.env.REDISTOGO_URL);
-
 var redis = require('redis');
 var url = require('url');
 var redisURL = url.parse(process.env.REDISCLOUD_URL);
 var client = redis.createClient(redisURL.port, redisURL.hostname, {no_ready_check: true});
 client.auth(redisURL.auth.split(":")[1]);
-// var client = redis.createClient(process.env.REDISCLOUD_URL, {no_ready_check: true});
 
-// client.set("welcome_msg", "Hello from Redis!")
 
-// client.get("welcome_msg", function (err, reply) {
-//   if (reply != null) {
-//     res.send(reply);
-//   } else {
-//     res.send("Error");
-//   }
-// });
 module.exports = {
   printGame: function (game) {
-    console.log("game Status");
 
     var text = "";
     var color = "";
+
+    // Generate response
     switch(game.state) {
         case gameStatus.INPROGRESS:
               text = "Game currently in progress.\nIt's " + game.currentPlayer + "'s turn.";
@@ -51,8 +38,9 @@ module.exports = {
               text = "Game over. \n" + game.player2 + " forfeited";
               color = "warning";
             break;
+        default:
+              console.log("Error with game state");
     }
-
 
     var response = {
       "response_type": "in_channel",
@@ -64,14 +52,13 @@ module.exports = {
             }
         ]
     };
-console.log("response: " + response);
+
     return response;
   },
   move: function (user_name, channel_name, row, col, successCallback, errorHandler) {
     loadGame(channel_name, function(game) {
-      console.log(row);
-      console.log(col);
 
+      // Check for errors
       if (game.state != gameStatus.INPROGRESS) {
         errorHandler("You can only make a move in a game still in progress.");
       }
@@ -84,40 +71,30 @@ console.log("response: " + response);
       else if (game.board[row][col] != 0) {
         errorHandler("That area is already marked.");
       }
-      else {
-        console.log("Valid area");
+      else { // Valid input
+
+        // Mark board
         if (user_name == game.player1)
           game.board[row][col] = 1;
         else if (user_name == game.player2)
           game.board[row][col] = -1;
 
-console.log("Check if won");
-        // check if game won
+        // check if someone won
         var winner = detectWinner(game.board);
-        if (winner == 1)
+        if (winner == 1) // Player 1 won
           game.state = gameStatus.GAMEOVERP1WON;
-        else if (winner == -1)
+        else if (winner == -1) // Player 2 won
           game.state = gameStatus.GAMEOVERP2WON;
-        else if (winner == 2)
+        else if (winner == 2) // Draw
           game.state = gameStatus.GAMEOVERDRAW;
 
-        console.log("Checked if won");
-        // Change player
+        // Update player
         if (game.currentPlayer == game.player1)
           game.currentPlayer = game.player2;
         else
           game.currentPlayer = game.player1;
 
-        //TODO: test draw draw
-        //TODO: formatting
-        //TODO: game help and other commands help
-
-
         storeGame(game);
-
-        // return getGameStatus(game);
-        // return game;
-        console.log("Callback with: " + game);
 
         successCallback(game);
       }
@@ -129,6 +106,8 @@ console.log("Check if won");
   },
   forfeit: function (channel_name, user_name, successCallback, errorHandler) {
     loadGame(channel_name, function(game) {
+
+      // Check for errors
       if (game.state != gameStatus.INPROGRESS) {
         errorHandler("You can only forfeit a game still in progress.");
       }
@@ -139,11 +118,8 @@ console.log("Check if won");
       else
        errorHandler("You can only forfeit a game that you are a part of."); 
 
-
       storeGame(game);
 
-      // return getGameStatus(game);
-      // return game;
       successCallback(game);
 
     }, function(error){
@@ -152,10 +128,7 @@ console.log("Check if won");
   },
   getGameStatus: function (channel_name, successCallback, errorHandler) {
     loadGame(channel_name, function(game) {
-
-      // storeGame(game);
       successCallback(game);
-
     }, function(error){
       errorHandler("There is currently no game in progress. To start a game, type '/ttt user' where user is the username of who you want to challenge.");
     });
@@ -163,7 +136,6 @@ console.log("Check if won");
   generateError: function (errorMessaage) {
     var response = {
       "response_type": "ephemeral",
-      //"text": "Error:",
         "attachments": [
             {
                 "text": errorMessaage,
@@ -171,13 +143,12 @@ console.log("Check if won");
             }
         ]
     };
-
     return response;
+
   },
   startGame: function (channel_name, player1, player2, boardSize, successCallback, errorHandler) {
-    // If game exists in chanel, error
-    // Start new game if old one is done
     loadGame(channel_name, function(game) {
+      // Start new game if current game in progress
       if (game.state != gameStatus.INPROGRESS) {
         var newGame = createGame(channel_name, player1, player2, boardSize);
         successCallback(newGame);
@@ -186,19 +157,16 @@ console.log("Check if won");
         errorHandler("Please finish the current game in the channel before creating a new one.");        
       }
 
-
-    }, function(error){
+    }, function(error){ // No game in progress
         var newGame = createGame(channel_name, player1, player2, boardSize);
         successCallback(newGame);
     });
-
-
-    // callback(gameStatus(game));
 
   }
 };
 
 function createGame (channel_name, player1, player2, boardSize) {
+  
   var game = {
     channel_name: channel_name,
     board: initBoard(boardSize),
@@ -207,37 +175,25 @@ function createGame (channel_name, player1, player2, boardSize) {
     player1: player1,
     player2: player2,
     currentPlayer: player1,
-
   };
+
   storeGame(game);
+
   return game;
 };
 
 function loadGame (channel_name, successCallback, errorCallback) {
-  // reddit.get('channel_name', function (err, value) {
-  //   if (value) {
-  //     successCallback(value);
-  //   }
-  // });
-
   client.get(channel_name, function (err, reply) {
     if (reply != null) {
-      // res.send(reply);
-      console.log("Reply:" + reply);
-      console.log("Err: " + err);
       successCallback(JSON.parse(reply));
     } else {
       errorCallback(err);
     }
   });
-
 };
 
 function storeGame (game) {
-  console.log("storing");
-  console.log(JSON.stringify(game));
   client.set(game.channel_name, JSON.stringify(game));
-  // redis.set(game.channel_name, JSON.stringify(game));
 };
 
 function initBoard (boardSize) {
@@ -249,14 +205,12 @@ function initBoard (boardSize) {
       board[i][j] = 0;
     };
   };
-  // console.log(board);
   return board;
 }
 
 // "text": "|       |       |  O  |\n----------------\n|       |       |  O  |\n----------------\n|  X  |  X  |  X  |"
 
 function printBoard (board) {
-  // console.log(board);
   var boardString = "";
   for (var i = 0; i < board.length; i++) {
     boardString = boardString + "|";
@@ -271,6 +225,8 @@ function printBoard (board) {
           case -1:
               boardString = boardString + "  O  |";
               break;
+          default:
+              boardString = boardString + "       |";
       }
     };
     boardString = boardString + "\n";
@@ -292,6 +248,7 @@ function detectWinner (board) {
   var diagSum2 = 0;
   var vertSum = new Array(board.length).fill(0);
   var markCounter = 0;
+
   for (var i = 0; i < board.length; i++) {
     for (var j = 0; j < board.length; j++) {
       var val = board[i][j];
