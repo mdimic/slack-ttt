@@ -7,7 +7,7 @@ var express = require('express');
 var app = express();
 var port = Number(process.env.PORT || 3000);
 // var request = require('request');
-// var authenticationTokens = require('./authentication');
+var authenticationTokens = require('./authentication');
 
 
 app.get('/', function (req, res) {
@@ -26,7 +26,7 @@ app.get('/', function (req, res) {
 	var input = text.split(" ");
 	
 	// Handle input
-	if (token != "Nrkey2tmCRu5YlO6nMIFBF4P") { // Check if token matches
+	if (token != authenticationTokens.slackAuth) { // Check if token matches
 		res.json(game.generateError("Unauthorized request."));
 	}
 	else if (!input[0] || input[0] == "help") { // Help
