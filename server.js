@@ -36,7 +36,7 @@ app.get('/', function (req, res) {
 			"attachments": [
 	            {
 					"title": "Tic-tac-toe commands",
-	            	"text": "'/ttt [username]' - start a game with username." +
+	            	"text": "'/ttt start [username]' - start a game with username." +
 							"\n'/ttt status' - displays current board status." +
 							"\n'/ttt move [row] [column]' - mark an empty space at [row, column]. Row and column go from 0 to [Board Size]." +
 					        "\n'/ttt forfeit' - forfeit the game. Any player can run this command regardless of whos turn it is." +
@@ -82,18 +82,18 @@ app.get('/', function (req, res) {
 
 		//responce = game status 
 	}
-	else {  // Initiate game
+	else if (input[0] == "start") {  // Initiate game
 		// game start
-		if (input.length > 2) {
-			res.json(game.generateError("Invalid input. To initiate a game type '/ttt [Username]' to play a game against username, or type '/ttt help' for more commands"));
+		if (input.length > 3) {
+			res.json(game.generateError("Invalid input. To initiate a game type '/ttt start [Username]' to play a game against username, or type '/ttt help' for more commands"));
 		}
 		else {
 			var boardSize = 3;
-			if (input.length == 2)
-				boardSize = input[1];
+			if (input.length == 3)
+				boardSize = input[2];
 
 			// if (userInChannel(input[0])) {
-				game.startGame(channel_name, user_name, input[0], boardSize, function(newGame) {
+				game.startGame(channel_name, user_name, input[1], boardSize, function(newGame) {
 					res.json(game.printGame(newGame));	
 				}, function(errorMessage) {
 					res.json(game.generateError(errorMessage));
@@ -102,7 +102,7 @@ app.get('/', function (req, res) {
 			// else {
 			// 	res.json(game.generateError("That player is not in this channel."));
 			// }
-			
+
 			// game.startGame(channel_name, user_name, input[0], boardSize, function(newGame) {
 			// 	res.json(game.printGame(newGame));	
 			// }, function(errorMessage) {
@@ -112,6 +112,9 @@ app.get('/', function (req, res) {
 		}
 
 		//  responce = status
+	}
+	else {
+		res.json(game.generateError("Invalid input. Type '/ttt help' for more commands"));
 	}
 
 	// game tools
