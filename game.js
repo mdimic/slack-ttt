@@ -298,7 +298,7 @@ function detectWinner (board) {
       if (i == j) {
         diagSum1 += val;
       }
-      else if (i == board.length - j - 1) {
+      if (i == board.length - j - 1) {
         diagSum2 += val;
       }
 
