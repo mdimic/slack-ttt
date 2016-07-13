@@ -147,20 +147,26 @@ module.exports = {
 
   },
   startGame: function (channel_name, player1, player2, boardSize, successCallback, errorHandler) {
-    loadGame(channel_name, function(game) {
-      // Start new game if current game in progress
-      if (game.state != gameStatus.INPROGRESS) {
-        var newGame = createGame(channel_name, player1, player2, boardSize);
-        successCallback(newGame);
-      }
-      else {
-        errorHandler("Please finish the current game in the channel before creating a new one.");        
-      }
-
-    }, function(error){ // No game in progress
-        var newGame = createGame(channel_name, player1, player2, boardSize);
-        successCallback(newGame);
-    });
+    
+    if (player1 == player2) {
+      errorHandler("You can't start a game against yourself");
+    }
+    else {
+        loadGame(channel_name, function(game) {
+          
+        // Start new game if current game in progress
+        if (game.state == gameStatus.INPROGRESS) {
+          errorHandler("Please finish the current game in the channel before creating a new one.");
+        }
+        else {
+          var newGame = createGame(channel_name, player1, player2, boardSize);
+          successCallback(newGame);        
+        }
+      }, function(error){ // No game in progress
+          var newGame = createGame(channel_name, player1, player2, boardSize);
+          successCallback(newGame);
+      }); 
+    }
 
   }
 };
